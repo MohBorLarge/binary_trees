@@ -1,59 +1,52 @@
 #include "binary_trees.h"
-
 /**
- * _binary_tree_height - helper func for binary_tree_height
- * @tree: input tree
- * Return: height of tree
+ * tree_is_perfect - function that says if a tree is perfect or not
+ * it has to be the same quantity of levels in left as right, and also
+ * each node has to have 2 nodes or none
+ * @tree: tree to check
+ * Return: 0 if is not a perfect or other number that is the level of height
  */
-size_t _binary_tree_height(const binary_tree_t *tree)
+int tree_is_perfect(const binary_tree_t *tree)
 {
-	size_t a, b;
+	int l = 0, r = 0;
 
-	if (!tree)
+	if (tree->left && tree->right)
+	{
+		l = 1 + tree_is_perfect(tree->left);
+		r = 1 + tree_is_perfect(tree->right);
+		if (r == l && r != 0 && l != 0)
+			return (r);
 		return (0);
-
-	a = _binary_tree_height(tree->left);
-	b = _binary_tree_height(tree->right);
-	return (MAX(a, b) + 1);
-}
-
-/**
- * binary_tree_height - measures the height of a binary tree
- * @tree: input tree
- * Return: height of tree
- */
-size_t binary_tree_height(const binary_tree_t *tree)
-{
-	if (!tree)
+	}
+	else if (!tree->left && !tree->right)
+	{
+		return (1);
+	}
+	else
+	{
 		return (0);
-	return (_binary_tree_height(tree) - 1);
+	}
 }
-
 /**
- * binary_tree_size - measures the size of a binary tree
- * @tree: input binary tree
- * Return: number of descendant child nodes
- */
-size_t binary_tree_size(const binary_tree_t *tree)
-{
-	if (!tree)
-		return (0);
-
-	return (1 + binary_tree_size(tree->left) + binary_tree_size(tree->right));
-}
-
-/**
- * binary_tree_is_perfect - checks if a binary tree is perfect
- * @tree: pointer to head of tree
- * Return: 1 if true 0 if false
+ * binary_tree_is_perfect - perfect or not a tree
+ * @tree: tree to check
+ * Return: 1 is it is or 0 if not
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int n, h;
+	int result = 0;
 
-	if (!tree)
+	if (tree == NULL)
+	{
 		return (0);
-	n = (int)binary_tree_size(tree);
-	h = binary_tree_height(tree);
-	return (n == (2 << h) - 1);
+	}
+	else
+	{
+		result = tree_is_perfect(tree);
+		if (result != 0)
+		{
+			return (1);
+		}
+		return (0);
+	}
 }
